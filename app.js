@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 var router = express.Router();  
+var ObjectId = require('mongodb').ObjectID;
 MongoClient = require('mongodb').MongoClient;
 
 const uri = "mongodb://knery:DiscoVoador123@ds245523.mlab.com:45523/eventsmaker"
@@ -22,7 +23,7 @@ app.set('view engine', 'ejs');
 
 // REST routes 
 app.get('/', (req, res) => {
-    res.render('index.ejs')
+    res.render('login.ejs')
 })
 
 app.get('/', (req, res) => {
@@ -37,7 +38,12 @@ app.get('/show', (req, res) => {
     })
 })
 
-app.post('/login', (req,res) => {
+app.get('/cadastro', (req, res) => {
+    res.render('cadastroUser.ejs')
+})
+
+
+app.post('/createUser', (req,res) => {
     console.log(req.body)
     db.collection('data').insertOne(req.body, (err, result) => {
         if (err) return console.log(err)    
@@ -51,28 +57,42 @@ app.post('/login', (req,res) => {
 app.route('/edit/:id')
 .get((req,res) => {
     var id = req.params.id
-
-    db.collection('data').find(ObjectId(id)).toArray((err, result) => {
+    var ObjectId = require('mongodb').ObjectID;
+    db.collection('data').find(ObjectId(id)).toArray((err,result) => {
         if (err) return res.send(err)
-        res.render('edit.ejs' , {data: result})
+        res.render('editUser.ejs', {data: result})
     })
 })
 .post((req, res) => {
+    console.log("Editando usuário") 
     var id = req.params.id
     var email = req.params.inputEmail
-    var passwrd = req.params.inputPassword 
+    var name = req.params.name
+    var birthdate = req.params.birthdate
+    var cidade = req.params.cidade
 
-    db.collection('data').updateOne({_id: objectId(id)},{
-
+    db.collection('data').updateOne({_id: ObjectId(id)},{
         $set: {
-            email : email,
-            password : password
+            name : name,
+            cidade: cidade
         }
         } ,(err, result) => {
             if (err) return res.send(err)
             res.redirect('/show')
             console.log('Atualizando no banco de dados')
     })
+})
+
+app.route('/delete/:id')
+.get((req,res) => {
+    var id = req.params.id
+    
+    db.collection('data').deleteOne({_id: ObjectId(id)}, (err,result) => {
+        if (err) return res.send(500, err)
+        console.log('Deletando do banco de dados!')
+        res.redirect('/show')
+    })
+
 })
 
 

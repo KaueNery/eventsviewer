@@ -2,26 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My CRUD in NodeJS</title>
+  <title>Usuários</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
 </head>
 <body>
 
-<h2>Registros<h2>
-    <table border="1">
+    <table class="table table-dark">
         <thead>
             <tr>
-                <td>Nome</td>
-                <td>Sobrenome</td>
+            <th scope="col">Usuários</th>
+                
             </tr>
+          <tr>
+                <td>Email</td>
+                <td>Nome</td>
+                <td>Data de Nascimento</td>
+                <td>Cidade</td>
+          </tr>
         </thead>
         <tbody>
-        <% data.forEach(function(details) { %>
-            <tr>
-                <td><%= details.inputEmail %></td>
-                <td><%= details.inputPassword %></td>
-            </tr>
-            <% }) %>
+                <% data.forEach(function(details) { %>
+                    <tr>
+                        <td><%= details.inputEmail %></td>
+                        <td><%= details.name %></td>
+                        <td><%= details.birthdate %></td>
+                        <td><%= details.cidade %></td>
+                    
+                        <td><a href="/edit/<%= details._id %>">Editar</a></td>
+                        <td><a href="/delete/<%= details._id %>">Deletar</a></td>
+                    </tr>
+                    <% }) %>
+                
         </tbody>
-        <button><a href="/">Voltar</a></button>
+      
+      </table>
+     <a href="/cadastro">Cadastrar Usuário</a>
+     <a href="../">Voltar</a>
+    
 </body>
 </html>
